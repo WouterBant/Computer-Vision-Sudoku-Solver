@@ -1,14 +1,21 @@
 import tkinter as tk
-from test import solve
 from generate import generate_puzzle
 
 
-# Create a function to validate the user's input
 def validate_input(row, col, value):
-    print(solution[row][col] == value)
     return solution[row][col] == value
 
-# Create a function to handle button click event
+
+def solve_puzzle():
+    global entries
+    for i in range(9):
+        for j in range(9):
+            entry = entries[i][j]
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, str(solution[i][j]))
+            entry.config(foreground="black")
+
+
 def on_button_click(row, col, button):
     value = button.get()
     if value:
@@ -21,35 +28,39 @@ def on_button_click(row, col, button):
     else:
         print("Not entered a number")
 
+
 def main():
-    # Create the GUI
     root = tk.Tk()
     root.title("Sudoku Solver")
 
-    # Create a frame for the Sudoku grid
     grid_frame = tk.Frame(root)
     grid_frame.pack()
 
-    # Create buttons for each cell in the Sudoku puzzle
+    global entries
     entries = []
     for i in range(9):
         row_entries = []
         for j in range(9):
             value = puzzle[i][j]
-            entry = tk.Entry(grid_frame, width=3, justify="center", font=("Arial", 20))
+            back_col = "lightgrey" if ((i//3) + (j//3)) % 2 else "white"
+            entry = tk.Entry(grid_frame, width=3, justify="center", font=("Arial", 20), bg=back_col, bd=1.5)
             if value != 0:
                 entry.insert(tk.END, str(value))
-            entry.grid(row=i, column=j, padx=2, pady=2, ipady=5)  # Add padding around each entry
+            entry.grid(row=i, column=j, padx=0, pady=0, ipady=5)
             entry.bind('<FocusOut>', lambda event, row=i, col=j, entry=entry: on_button_click(row, col, entry))
             row_entries.append(entry)
 
         entries.append(row_entries)
 
-    # Create the Solve button
-    solve_button = tk.Button(root, text="Solve", command=solve(puzzle), font=("Arial", 16))
+    solve_button = tk.Button(root, text="Solve", command=solve_puzzle, font=("Arial", 16))
     solve_button.pack(pady=10)
 
-    # Start the GUI event loop
+    reset_button = tk.Button(root, text="reset", command=reset_puzzle, font=("Arial", 16))
+    reset_button.pack(pady=10)
+
+    new_button = tk.Button(root, text="new", command=new_puzzle, font=("Arial", 16))
+    new_button.pack(pady=10)
+
     root.mainloop()
 
 
