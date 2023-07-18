@@ -16,6 +16,31 @@ def solve_puzzle():
             entry.config(foreground="black")
 
 
+def reset_puzzle():
+    global entries, puzzle
+    for i in range(9):
+        for j in range(9):
+            entry = entries[i][j]
+            entry.delete(0, tk.END)
+            value = puzzle[i][j]
+            if value != 0:
+                entry.insert(tk.END, str(value))
+            entry.config(foreground="black")
+
+
+def new_puzzle():
+    global solution, puzzle, entries
+    solution, puzzle = generate_puzzle()
+    for i in range(9):
+        for j in range(9):
+            entry = entries[i][j]
+            entry.delete(0, tk.END)
+            value = puzzle[i][j]
+            if value != 0:
+                entry.insert(tk.END, str(value))
+            entry.config(foreground="black")
+
+
 def on_button_click(row, col, button):
     value = button.get()
     if value:
@@ -52,14 +77,17 @@ def main():
 
         entries.append(row_entries)
 
-    solve_button = tk.Button(root, text="Solve", command=solve_puzzle, font=("Arial", 16))
-    solve_button.pack(pady=10)
+    button_frame = tk.Frame(root)
+    button_frame.pack(pady=10)
 
-    reset_button = tk.Button(root, text="reset", command=reset_puzzle, font=("Arial", 16))
-    reset_button.pack(pady=10)
+    solve_button = tk.Button(button_frame, text="Solve", command=solve_puzzle, font=("Arial", 16))
+    solve_button.pack(side="left", padx=5)
 
-    new_button = tk.Button(root, text="new", command=new_puzzle, font=("Arial", 16))
-    new_button.pack(pady=10)
+    reset_button = tk.Button(button_frame, text="Reset", command=reset_puzzle, font=("Arial", 16))
+    reset_button.pack(side="left", padx=5)
+
+    new_button = tk.Button(button_frame, text="New", command=new_puzzle, font=("Arial", 16))
+    new_button.pack(side="left", padx=5)
 
     root.mainloop()
 
