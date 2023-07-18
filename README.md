@@ -15,3 +15,5 @@
 - Make GUI with pygame
 
 - Documentation
+
+- Solve bug that causes not omitting omittable numbers

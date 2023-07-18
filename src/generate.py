@@ -36,7 +36,7 @@ def generate_solution_puzzle():
             return configuration
         
 
-def omit_numbers(solution, attempted_numbers_to_omit=70):
+def omit_numbers(solution, attempted_numbers_to_omit=81):
     """
     Omit numbers while ensuring the resulting puzzle has a unique solution.
     """
