@@ -4,3 +4,5 @@ opencv-python==4.8.0
 matplotlib==3.6.3
 pandas==1.5.2
 tkinter==8.6
+imutils==0.5.4
+scikit-image==0.21.0
