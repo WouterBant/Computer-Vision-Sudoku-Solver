@@ -9,13 +9,13 @@
 ## About
 Utilizing computer vision to get Sudoku puzzles from images/pictures.
 
-![Example Image](assets/InitialSudoku.png)
+<img src="assets/InitialSudoku.png" alt="Example Image" width="400" height="400">
 
-![Example Image](assets/ThreshedSudoku.png)
+<img src="assets/ThreshedSudoku.png" alt="Example Image" width="400" height="400">
 
-![Example Image](assets/DetectedSudoku.png)
+<img src="assets/DetectedSudoku.png" alt="Example Image" width="400" height="400">
 
-![Example Image](assets/SolvedSudoku.png)
+<img src="assets/SolvedSudoku.png" alt="Example Image" width="400" height="400">
 
 ## Structure
 
