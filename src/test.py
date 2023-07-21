@@ -25,32 +25,36 @@ def valid(configuration):
     return True
 
 
-def solve(configuration):
+def solve(configuration, determine_uniqueness=False):
     board = copy.deepcopy(configuration)
+    solutionCount = 0
 
     def solve_h():
+        nonlocal solutionCount, determine_uniqueness
         def possible_placement(r, c, n):
-            if (any(board[r][i]==n for i in range(9))
-                or any(board[i][c]==n for i in range(9))
-                or any(board[i][j]==n for i in range(3*(r//3), 3*(r//3)+3) 
-                                        for j in range(3*(c//3), 3*(c//3)+3))):
+            if (any(board[r][i]==n for i in range(9)) or
+                any(board[i][c]==n for i in range(9)) or
+                any(board[i][j]==n for i in range(3*(r//3), 3*(r//3)+3) 
+                                for j in range(3*(c//3), 3*(c//3)+3))):
                 return False
             return True
-        
+
         for r in range(9):
             for c in range(9):
-                if board[r][c] != 0:
-                    continue
-                for n in (1,2,3,4,5,6,7,8,9):
-                    if possible_placement(r, c, n):
-                        board[r][c] = n
-                        if solve_h():
-                            return True
-                        board[r][c] = 0
-                return False
+                if board[r][c] == 0:
+                    for n in range(1, 10):
+                        if possible_placement(r, c, n):
+                            board[r][c] = n
+                            if solve_h():
+                                solutionCount += 1  # Increment solution count
+                                if not determine_uniqueness or solutionCount > 1:  # Stop if more than one solution found
+                                    return True
+                            board[r][c] = 0  # Backtrack
+                    return False
+
         return True
+
     solve_h()
-    
-    return board
+    return (board, solutionCount)
 
         

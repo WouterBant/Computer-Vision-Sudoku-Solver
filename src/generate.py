@@ -1,6 +1,7 @@
 import random
 import copy
 from src.test import valid, solve
+# from test import valid, solve
 import time
 
 def generate_configuration():
@@ -48,7 +49,7 @@ def generate_solution_puzzle():
 			assert valid(configuration) == True
 			return configuration
 
-def omit_numbers(solution, attempted_numbers_to_omit=81):
+def omit_numbers(solution, difficult):
 	"""
 	Omit numbers from the given Sudoku solution while ensuring the resulting puzzle has a unique solution.
 
@@ -97,14 +98,27 @@ def omit_numbers(solution, attempted_numbers_to_omit=81):
 	while cells_left:
 		row, column = random.choice(list(cells_left))
 		cells_left.remove((row, column))
+		# print(number_cells_omitted)
+		# print(configuration)
 
-		if able_to_omit(row, column):
+		if not difficult:
+			if able_to_omit(row, column):
+				configuration[row][column] = 0
+				number_cells_omitted += 1
+		else:
+			tmp = configuration[row][column]
 			configuration[row][column] = 0
-			number_cells_omitted += 1
+			a = solve(configuration, True)[1]
+			# print(a)
+			if a > 1:
+				configuration[row][column] = tmp
+				# print()
+			else:
+				number_cells_omitted += 1
 
 	return configuration, number_cells_omitted
 
-def generate_puzzle():
+def generate_puzzle(difficult=True):
 	"""
 	Generates a Sudoku puzzle and its unique solution.
 
@@ -115,13 +129,20 @@ def generate_puzzle():
 			list: A 9x9 list representing the Sudoku puzzle.
 				Each cell contains a number from 0 to 9, where 0 represents an empty cell.
     """
+	omitted = 0
+	# while omitted < 60:
 	solution = generate_solution_puzzle()
-	puzzle, omitted = omit_numbers(solution)
-	assert solve(puzzle) == solution  # Uniqueness requirement
+	puzzle, omitted = omit_numbers(solution, difficult)
+	# print(puzzle)
+	# print(solution)
+	a  = solve(puzzle)[0]
+	# print(a)
+	assert a == solution  # Uniqueness requirement
+	# print(omitted)
 	return (solution, puzzle)
 
 if __name__ == "__main__":
 	start_time = time.time()
-	for _ in range(10):
-		generate_puzzle()
+	for _ in range(1):
+		generate_puzzle(True)
 	print(f"Time elapsed: {time.time() - start_time}")

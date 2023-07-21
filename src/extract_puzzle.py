@@ -59,9 +59,8 @@ def find_puzzle(image, debug=False):
 		cv.imshow("Puzzle Thresh", thresh)
 		cv.waitKey(0)
 
-		output = image.copy()
-		cv.drawContours(image=output, contours=[puzzle_contour], contourIdx=-1, color=(255, 0, 0), thickness=4)
-		cv.imshow("Puzzle Outline", output)
+		cv.drawContours(image=image, contours=[puzzle_contour], contourIdx=-1, color=(255, 0, 0), thickness=4)
+		cv.imshow("Puzzle Outline", image)
 		cv.waitKey(0)
 
 		cv.imshow("Puzzle Transform", puzzle)
@@ -87,7 +86,7 @@ def extract_digit(cell, debug=False):
 	_, thresh = cv.threshold(src=cell, thresh=0, maxval=255, type= cv.THRESH_BINARY_INV | cv.THRESH_OTSU)
 	thresh = clear_border(thresh)
 
-	contours = cv.findContours(image=thresh.copy(), mode=cv.RETR_EXTERNAL, method=cv.CHAIN_APPROX_SIMPLE)
+	contours = cv.findContours(image=thresh, mode=cv.RETR_EXTERNAL, method=cv.CHAIN_APPROX_SIMPLE)
 	contours = imutils.grab_contours(cnts=contours)
 
 	# Empty cell
@@ -136,12 +135,15 @@ def visualize(image):
 
 	# Process each cell in the rectified grid
 	for y in range(9):
-		row = []
+		rowCells = []
+		
+		y_start, y_end = y * dy, (y + 1) * dy
+
 		for x in range(9):
-			startX, startY = x * dx, y * dy
-			endX, endY = (x + 1) * dx, (y + 1) * dy
-			cell = rectified_grid[startY:endY, startX:endX]
-			row.append((startX, startY, endX, endY))
+			x_start, x_end = x * dx, (x + 1) * dx
+
+			cell = rectified_grid[y_start:y_end, x_start:x_end]
+			rowCells.append((x_start, y_start, x_end, y_end))
 
 			# Extract the digit from the cell
 			digit = extract_digit(cell, debug=False)
@@ -155,31 +157,31 @@ def visualize(image):
 				predictions = model.predict(roi, verbose=0)
 				estimate = predictions.argmax(axis=1)[0]
 
-				# Handle special case: recognizing '6' with low confidence
-				if estimate == 8 and predictions[0][6] > 0.00002:
+				# 6 is seen as 8 many times
+				if estimate == 8 and predictions[0][6] > 0.002:
 					estimate = 6
 
 				# Update the Sudoku board with the estimated digit
 				board[y, x] = estimate
 		
-		cells.append(row)
+		cells.append(rowCells)
 
 	# Solve the Sudoku puzzle
-	solution = solve(board)
+	solution = solve(board)[0]
 
 	# Annotate the solution on the original image
-	for r, (cellRow, boardRow) in enumerate(zip(cells, solution)):
-		for c, (square, digit) in enumerate(zip(cellRow, boardRow)):
-			if not board[r, c]:
-				startX, startY, endX, endY = square
-				textX = int((endX - startX) * 0.33) + startX
-				textY = int((endY - startY) * 0.81) + startY
-				cv.putText(img=puzzleImage, text=str(digit), org=(textX, textY), 
-						   fontFace=cv.FONT_HERSHEY_SIMPLEX, fontScale=1.2,
-						   color=(0, 0, 255), thickness=3)
+	for r, (cellRow, solutionRow) in enumerate(zip(cells, solution)):
+		for c, (cell, digit) in enumerate(zip(cellRow, solutionRow)):
+			if not board[r, c]:  # Empty cell
+				x_start, y_start, x_end, y_end = cell
+				x_text = int((x_end - x_start) * 0.28) + x_start
+				y_text = int((y_end - y_start) * 0.82) + y_start
+				cv.putText(img=puzzleImage, text=str(digit), org=(x_text, y_text), 
+						   fontFace=cv.FONT_HERSHEY_COMPLEX, fontScale=1,
+						   color=(0, 0, 255), thickness=2)
 
 	# Display the annotated Sudoku result
-	cv.imshow("Sudoku Result", puzzleImage)
+	cv.imshow("Solved Sudoku", puzzleImage)
 	cv.waitKey(0)
 
 
@@ -187,5 +189,8 @@ if __name__ == "__main__":
 	# from camera import take_picture
 	# image = take_picture()
 	# cv.imshow("Image", image)
-	image = cv.imread('input/picca.webp')
+	piccas = ["picca.webp", "picca2.png", "picca3.jpeg", "picca4.png"]
+	picca = piccas[1]
+	image = cv.imread('input/' + picca)
+	image = cv.resize(image, (500,500))
 	visualize(image=image)
