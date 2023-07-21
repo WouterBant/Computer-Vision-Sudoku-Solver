@@ -59,7 +59,7 @@ def find_puzzle(image, debug=False):
 		cv.imshow("Puzzle Thresh", thresh)
 		cv.waitKey(0)
 
-		cv.drawContours(image=image, contours=[puzzle_contour], contourIdx=-1, color=(255, 0, 0), thickness=4)
+		cv.drawContours(image=image, contours=[puzzle_contour], contourIdx=-1, color=(0, 0, 255), thickness=4)
 		cv.imshow("Puzzle Outline", image)
 		cv.waitKey(0)
 
@@ -124,7 +124,7 @@ def visualize(image):
 		None
 	"""
 	# Find the Sudoku puzzle and rectify it
-	puzzleImage, rectified_grid = find_puzzle(image, debug=False)
+	puzzleImage, rectified_grid = find_puzzle(image, debug=True)
 
 	# Initialize the board and model for digit classification
 	board = np.zeros((9, 9), dtype="int")

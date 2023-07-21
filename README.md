@@ -9,23 +9,35 @@
 ## About
 Utilizing computer vision to get Sudoku puzzles from images/pictures.
 
+![Example Image](assets/InitialSudoku.png)
+
+![Example Image](assets/ThreshedSudoku.png)
+
+![Example Image](assets/DetectedSudoku.png)
+
+![Example Image](assets/SolvedSudoku.png)
+
 ## Structure
 
-* The code for the Deep Neural Networks and the network themselves can be found in [/models](models)
+* All other code can be found in [/models](models)
  
-  * [/digit_classifier](models/digit_classifier.ipynb): contains the code to create and train the DNN to classify digits. For this the MNIST dataset was utilized.
+  * [/digit_classifier.ipynb](models/digit_classifier.ipynb): contains the code to create and train the DNN to classify digits. For this the MNIST dataset was utilized.
 
-  * [/classes](models/solve.ipynb): TODO: will contain code to create a DNN that can solve Sudoku's.
+  * [/solve.ipynb](models/solve.ipynb): TODO: will contain code to create a DNN that can solve Sudoku's.
 
 * All other code can be found in [/src](src):
 
-  * [/analysis_util](src/analysis_util): contains a [cycle classifier](src/analysis_util/cylcle_classifier.py) and functions used for [plotting](src/analysis_util/visualize.py) and to get the [statistics](src/analysis_util/statistics.py) presented in the paper.
+  * [/camera.py](src/camera.py): Opens the camera and returns the last frame.
 
-  * [/classes](src/classes): contains the [Q-learning](src/classes/Qlearning.py), [DQN](src/classes/DQN.py) and [regulator](src/classes/regulator.py) agents, as well as the [economic environment](src/classes/environment.py) and the [action](src/classes/action.py) class.
+  * [/extract_puzzle.py](src/extract_puzzle.py): find the puzzle, classifies every digit with the DNN, and displays the solution in the birdview from the Sudoku obtained from the image. 
 
-  * [/runs](src/runs): contains the analysis of different runs and shows the figures presented in the paper.
+  * [/generate.py](src/generate.py): generates easy or difficult Sudoku puzzles with a unique solution.
 
-  * [algorithms.py](src/algorithms.py): contains the algorithms used to simulate episodes in the different settings discussed in the paper.
+  * [get_data.py](src/get_data.py): saves generated puzzles in JSON format.
+
+  * [gui.py](src/gui.py): makes the GUI where you can solve Sudoku's.
+
+  * [test.py](src/test.py): contains code that checks the validity and unique solvability of a Sudoku.
 
 
 ## Getting started
