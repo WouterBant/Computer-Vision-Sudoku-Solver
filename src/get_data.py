@@ -1,4 +1,4 @@
-from generate import generate_puzzle
+from src.generate import generate_puzzle
 import json
 import os
 

@@ -27,9 +27,6 @@ def take_picture():
     cap.release()
     cv2.destroyAllWindows()
 
-    # Save the picture to a file
-    filename = "captured_picture.jpg"
-    # cv2.imwrite(filename, frame)
     return frame
 
 if __name__ == "__main__":

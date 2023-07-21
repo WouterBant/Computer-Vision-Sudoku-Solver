@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from generate import generate_puzzle
-from camera import take_picture
+from src.generate import generate_puzzle
+from src.camera import take_picture
 from functools import partial
 
 
@@ -66,6 +66,8 @@ def on_entry_focus_out(event, entries_info):
 
 
 def main():
+    global solution, puzzle
+    solution, puzzle = generate_puzzle()
     root = tk.Tk()
     root.title("Sudoku Solver")
 
@@ -119,5 +121,4 @@ def main():
 
 
 if __name__ == "__main__":
-    solution, puzzle = generate_puzzle()
     main()
