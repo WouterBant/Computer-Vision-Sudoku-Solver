@@ -4,8 +4,6 @@
 
 - Train NN to solve puzzles --> determine the accuracy
 
-- GUI from image as well
-
 ## About
 Utilizing computer vision to get Sudoku puzzles from images/pictures.
 
@@ -51,7 +49,7 @@ pip install -r requirements.txt
 
 ```
 
-Python 3.10.6 was used.
+Python 3.11.4 was used.
 
 ### Usage
 Run the following command to open the GUI:

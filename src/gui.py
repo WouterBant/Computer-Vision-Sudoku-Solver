@@ -6,6 +6,7 @@ from src.extract_puzzle import extract
 import time
 import cv2 as cv
 
+
 def validate_input(row, col, value):
 	"""
 	Validate the input value for a Sudoku cell.
@@ -66,8 +67,14 @@ def reset_puzzle():
 
 	This function clears the user's inputs and restores the original puzzle state.
 	"""
-	global entries, puzzle, initial_empty_cells, wrongs
-	initial_empty_cells = wrongs = 0
+	global entries, puzzle, initial_empty_cells, start_time
+	tmp1, tmp2 = start_time, initial_empty_cells
+	fill()
+	start_time, initial_empty_cells = tmp1, tmp2
+
+def fill():
+	global entries, start_time, initial_empty_cells
+	initial_empty_cells = 0
 	for i in range(9):
 		for j in range(9):
 			entry = entries[i][j]
@@ -78,6 +85,7 @@ def reset_puzzle():
 			else:
 				initial_empty_cells += 1
 			entry.config(foreground="black")
+	start_time = time.time()
 
 def new_puzzle(difficult=True):
 	"""
@@ -85,32 +93,17 @@ def new_puzzle(difficult=True):
 
 	This function generates a new Sudoku puzzle and updates the GUI with the new puzzle.
 	"""
-	global solution, puzzle, entries, start_time
+	global solution, puzzle, wrongs
+	wrongs = 0
 	solution, puzzle = generate_puzzle(difficult)
-	for i in range(9):
-		for j in range(9):
-			entry = entries[i][j]
-			entry.delete(0, tk.END)
-			value = puzzle[i][j]
-			if value != 0:
-				entry.insert(tk.END, str(value))
-			entry.config(foreground="black")
-	start_time = time.time()
+	fill()
 
 def from_picture():
 	global solution, puzzle, entries, start_time
 	frame = take_picture()
 	cv.imshow("Picca", frame)
-	solution, puzzle = extract(frame)
-	for i in range(9):
-		for j in range(9):
-			entry = entries[i][j]
-			entry.delete(0, tk.END)
-			value = puzzle[i][j]
-			if value != 0:
-				entry.insert(tk.END, str(value))
-			entry.config(foreground="black")
-	start_time = time.time()
+	solution, puzzle, _, _ = extract(frame)
+	fill()
 
 def on_button_click(row, col, button):
 	"""
