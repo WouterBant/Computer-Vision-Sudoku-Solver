@@ -38,6 +38,8 @@ def find_puzzle(image, debug=False):
 		if len(estimate) == 4:  # Largest contour with 4 corners most likely to be the border
 			puzzle_contour = estimate
 			break
+	else:
+		raise("Could not identify a puzzle")
 
 	# Get bird view of the puzzle
 	puzzle = four_point_transform(image=image, pts=puzzle_contour.reshape(4, 2))
@@ -96,7 +98,7 @@ def extract_digit(cell, debug=False):
 	cv.drawContours(image=mask, contours=[contour], contourIdx=-1, color=255, thickness=-1)
 
 	h, w = thresh.shape
-	if cv.countNonZero(mask) / float(h * w) <= 0.05:  # Likely just noise --> 0
+	if cv.countNonZero(mask)/float(h*w) <= 0.05:  # Likely just noise --> 0
 		return None
 
 	digit = cv.bitwise_and(src1=thresh, src2=thresh, mask=mask)
@@ -115,7 +117,7 @@ def extract(image):
 
 	# Initialize the board and model for digit classification
 	board = np.zeros((9, 9), dtype="int")
-	model = load_model('models/digit_classifier2.h5', compile=False)
+	model = load_model('models/digit_classifier.h5', compile=False)
 
 	dy, dx = tuple(dim // 9 for dim in rectified_grid.shape)
 	cells = []
@@ -176,9 +178,8 @@ def visualize(image):
 		for c, (cell, digit) in enumerate(zip(cellRow, solutionRow)):
 			if not board[r, c]:  # Empty cell
 				x_start, y_start, x_end, y_end = cell
-				x_text = int((x_end - x_start) * 0.28) + x_start
-				y_text = int((y_end - y_start) * 0.82) + y_start
-				cv.putText(img=puzzleImage, text=str(digit), org=(x_text, y_text), 
+				cv.putText(img=puzzleImage, text=str(digit), 
+	       				   org=(int((x_end-x_start)*0.28)+x_start, int((y_end-y_start)*0.82)+y_start), 
 						   fontFace=cv.FONT_HERSHEY_COMPLEX, fontScale=1,
 						   color=(0, 0, 255), thickness=2)
 

@@ -61,17 +61,6 @@ def solve_puzzle():
 			entry.insert(tk.END, str(solution[i][j]))
 			entry.config(foreground="black")
 
-def reset_puzzle():
-	"""
-	Reset the puzzle to its initial state.
-
-	This function clears the user's inputs and restores the original puzzle state.
-	"""
-	global entries, puzzle, initial_empty_cells, start_time
-	tmp1, tmp2 = start_time, initial_empty_cells
-	fill()
-	start_time, initial_empty_cells = tmp1, tmp2
-
 def fill():
 	global entries, start_time, initial_empty_cells
 	initial_empty_cells = 0
@@ -86,6 +75,17 @@ def fill():
 				initial_empty_cells += 1
 			entry.config(foreground="black")
 	start_time = time.time()
+
+def reset_puzzle():
+	"""
+	Reset the puzzle to its initial state.
+
+	This function clears the user's inputs and restores the original puzzle state.
+	"""
+	global entries, puzzle, initial_empty_cells, start_time
+	tmp1, tmp2 = start_time, initial_empty_cells
+	fill()
+	start_time, initial_empty_cells = tmp1, tmp2
 
 def new_puzzle(difficult=True):
 	"""

@@ -12,6 +12,7 @@ Utilizing computer vision to get Sudoku puzzles from images/pictures.
     <img src="assets/ThreshedSudoku.png" alt="Example Image" width="250" height="250">
     <img src="assets/DetectedSudoku.png" alt="Example Image" width="250" height="250">
     <img src="assets/SolvedSudoku.png" alt="Example Image" width="250" height="250">
+    <img src="assets/GUI.png" alt="Example Image" height="250">
 </div>
 
 

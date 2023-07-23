@@ -46,12 +46,11 @@ def solve(configuration, determine_uniqueness=False):
                         if possible_placement(r, c, n):
                             board[r][c] = n
                             if solve_h():
-                                solutionCount += 1  # Increment solution count
                                 if not determine_uniqueness or solutionCount > 1:  # Stop if more than one solution found
                                     return True
                             board[r][c] = 0  # Backtrack
                     return False
-
+        solutionCount += 1  # Increment solution count
         return True
 
     solve_h()
