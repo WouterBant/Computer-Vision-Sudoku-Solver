@@ -1,7 +1,6 @@
 import random
 import copy
 from src.test import valid, solve
-# from test import valid, solve
 import time
 
 def generate_configuration():

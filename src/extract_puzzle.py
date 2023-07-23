@@ -5,7 +5,7 @@ from skimage.segmentation import clear_border
 import numpy as np
 import imutils
 import cv2 as cv
-from test import solve
+from src.test import solve
 
 
 def find_puzzle(image, debug=False):
@@ -39,10 +39,7 @@ def find_puzzle(image, debug=False):
 			puzzle_contour = estimate
 			break
 
-	if puzzle_contour is None:
-		raise Exception(("No Sudoku was found"))
-
-	# Get bird view of the puzzles
+	# Get bird view of the puzzle
 	puzzle = four_point_transform(image=image, pts=puzzle_contour.reshape(4, 2))
 	rectified_puzzle = four_point_transform(image=gray,  pts=puzzle_contour.reshape(4, 2))
 	
@@ -113,6 +110,55 @@ def extract_digit(cell, debug=False):
 	return digit
 
 
+def extract(image):
+	puzzleImage, rectified_grid = find_puzzle(image, debug=True)
+
+	# Initialize the board and model for digit classification
+	board = np.zeros((9, 9), dtype="int")
+	model = load_model('models/digit_classifier2.h5', compile=False)
+
+	dy, dx = tuple(dim // 9 for dim in rectified_grid.shape)
+	cells = []
+
+	# Process each cell in the rectified grid
+	for y in range(9):
+		rowCells = []
+		
+		y_start, y_end = y * dy, (y + 1) * dy
+
+		for x in range(9):
+			x_start, x_end = x * dx, (x + 1) * dx
+
+			cell = rectified_grid[y_start:y_end, x_start:x_end]
+			rowCells.append((x_start, y_start, x_end, y_end))
+
+			# Extract the digit from the cell
+			digit = extract_digit(cell, debug=False)
+			if digit is not None:
+				# Prepare the digit for classification
+				roi = cv.resize(digit, (28, 28))
+				roi = roi.astype("float") / 255.0
+				roi = np.expand_dims(roi, axis=0)
+
+				# Classify the digit using the model
+				predictions = model.predict(roi, verbose=0)
+				estimate = predictions.argmax(axis=1)[0]
+
+				# 6 is seen as 8 many times
+				# Possibility: use different CNN with other kernels in this case
+				if estimate == 8 and predictions[0][6] > 0.002:
+					estimate = 6
+
+				# Update the Sudoku board with the estimated digit
+				board[y, x] = estimate
+		
+		cells.append(rowCells)
+
+	# Solve the Sudoku puzzle
+	solution = solve(board)[0]
+	return (solution, board)
+
+
 def visualize(image):
 	"""
 	Process the input image to solve the Sudoku puzzle and visualize the result.
@@ -158,6 +204,7 @@ def visualize(image):
 				estimate = predictions.argmax(axis=1)[0]
 
 				# 6 is seen as 8 many times
+				# Possibility: use different CNN with other kernels in this case
 				if estimate == 8 and predictions[0][6] > 0.002:
 					estimate = 6
 
@@ -186,11 +233,8 @@ def visualize(image):
 
 
 if __name__ == "__main__":
-	# from camera import take_picture
-	# image = take_picture()
+	from camera import take_picture
+	image = take_picture()
 	# cv.imshow("Image", image)
-	piccas = ["picca.webp", "picca2.png", "picca3.jpeg", "picca4.png"]
-	picca = piccas[1]
-	image = cv.imread('input/' + picca)
 	image = cv.resize(image, (500,500))
 	visualize(image=image)

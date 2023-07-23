@@ -2,8 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from src.generate import generate_puzzle
 from src.camera import take_picture
+from src.extract_puzzle import extract
 import time
-
+import cv2 as cv
 
 def validate_input(row, col, value):
 	"""
@@ -96,6 +97,21 @@ def new_puzzle(difficult=True):
 			entry.config(foreground="black")
 	start_time = time.time()
 
+def from_picture():
+	global solution, puzzle, entries, start_time
+	frame = take_picture()
+	cv.imshow("Picca", frame)
+	solution, puzzle = extract(frame)
+	for i in range(9):
+		for j in range(9):
+			entry = entries[i][j]
+			entry.delete(0, tk.END)
+			value = puzzle[i][j]
+			if value != 0:
+				entry.insert(tk.END, str(value))
+			entry.config(foreground="black")
+	start_time = time.time()
+
 def on_button_click(row, col, button):
 	"""
 	Handle the button click event for a Sudoku cell.
@@ -172,7 +188,7 @@ def main():
 	button_frame3.pack(pady=10)
 
 	# Add the Capture Frames button
-	capture_button = ttk.Button(button_frame3, text="From Picture", command=take_picture, style="My.TButton")
+	capture_button = ttk.Button(button_frame3, text="From Picture", command=from_picture, style="My.TButton")
 	capture_button.pack(side="left", padx=5)
 
 	# Define a custom style for the ttk.Buttons
