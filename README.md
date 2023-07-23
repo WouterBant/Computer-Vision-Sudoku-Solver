@@ -2,10 +2,10 @@
 
 ## TODO
 
-- Train NN to solve puzzles --> determine the accuracy
+- Train NN to solve puzzles --> Determine the accuracy
 
 ## About
-Utilizing computer vision to get Sudoku puzzles from images/pictures.
+Utilizing computer vision to get Sudoku puzzles from pictures.
 
 <div style="display: flex; flex-wrap: wrap;">
     <img src="assets/InitialSudoku.png" alt="Example Image" width="250" height="250">
@@ -20,23 +20,23 @@ Utilizing computer vision to get Sudoku puzzles from images/pictures.
 
 * All other code can be found in [/models](models)
  
-  * [/digit_classifier.ipynb](models/digit_classifier.ipynb): contains the code to create and train the DNN to classify digits. For this the MNIST dataset was utilized.
+  * [/digit_classifier.ipynb](models/digit_classifier.ipynb): contains the code to create and train the DNN to classify digits. For this, the MNIST dataset was utilized.
 
-  * [/solve.ipynb](models/solve.ipynb): TODO: will contain code to create a DNN that can solve Sudoku's.
+  * [/solve.ipynb](models/solve.ipynb): TODO: will contain code to create a DNN to solve Sudoku's.
 
 * All other code can be found in [/src](src):
 
   * [/camera.py](src/camera.py): Opens the camera and returns the last frame.
 
-  * [/extract_puzzle.py](src/extract_puzzle.py): find the puzzle, classifies every digit with the DNN, and displays the solution in the birdview from the Sudoku obtained from the image. 
+  * [/extract_puzzle.py](src/extract_puzzle.py): find the puzzle, classifies every digit with the DNN, and display the solution in bird view from the Sudoku obtained from the image. 
 
-  * [/generate.py](src/generate.py): generates easy or difficult Sudoku puzzles with a unique solution.
+  * [/generate.py](src/generate.py): generates easy or hard Sudoku puzzles with a unique solution.
 
-  * [get_data.py](src/get_data.py): saves generated puzzles in JSON format.
+  * [get_data.py](src/get_data.py): saves generated puzzles in CSV format.
 
   * [gui.py](src/gui.py): makes the GUI where you can solve Sudoku's.
 
-  * [test.py](src/test.py): contains code that checks the validity and unique solvability of a Sudoku.
+  * [test.py](src/test.py): contains code that checks a Sudoku's validity and unique solvability.
 
 
 ## Getting started
