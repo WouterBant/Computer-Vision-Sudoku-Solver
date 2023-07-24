@@ -1,9 +1,5 @@
 <h1 align="center">Computer Vision Sudoku Solver</h1>
 
-## TODO
-
-- Train NN to solve puzzles --> Determine the accuracy
-
 ## About
 Utilizing computer vision to get Sudoku puzzles from pictures.
 
@@ -22,7 +18,7 @@ Utilizing computer vision to get Sudoku puzzles from pictures.
  
   * [/digit_classifier.ipynb](models/digit_classifier.ipynb): contains the code to create and train the DNN to classify digits. For this, the MNIST dataset was utilized.
 
-  * [/solve.ipynb](models/solve.ipynb): TODO: will contain code to create a DNN to solve Sudoku's.
+  * [/solve.ipynb](models/solve.ipynb): contains code to train a DNN and an analysis on time and accuracy.
 
 * All other code can be found in [/src](src):
 
@@ -60,6 +56,10 @@ Run the following command to open the GUI:
 python main.py
 
 ```
+
+### Todos
+
+- Find smaller (faster) NN to solve Sudoku's with high accuracy
 
 ## License
 MIT

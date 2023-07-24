@@ -10,7 +10,6 @@ __pycache__/
 .vscode
 .Python
 build/
-data/
 myenv/
 develop-eggs/
 dist/
@@ -20,7 +19,7 @@ eggs/
 lib/
 lib64/
 parts/
-input/
+# input/
 sdist/
 var/
 wheels/
